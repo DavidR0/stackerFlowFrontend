@@ -17,6 +17,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
 import { RegisterComponent } from './pages/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
+import { QuestionCardComponent } from './components/question-card/question-card.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { HomeComponent } from './pages/home/home.component';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
+    QuestionCardComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,13 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  background-color: #303030;}
+body { padding-top: 65px; margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;  background-color: #303030;}
 
-.img{
+.img-planet{
     background-image: url('../src/assets/Purple-Planet.svg');
     background-color: #303030;
-    background-position: bottom;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: 44%;
+    background-size: 45%;
     width: 100%; height: 100%;
+}
+
+.img-rocket{
+    background-image: url('../src/assets/pastel_rocket.svg');
+    background-color: #303030;
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: 20%;
+    width: 100%; height: 100%;    
 }
