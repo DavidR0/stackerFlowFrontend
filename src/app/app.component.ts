@@ -11,7 +11,6 @@ import { AccountService } from './services/account.service';
 
 export class AppComponent {
   title = 'stackerflow';
-  searchValue = '';//?? needed??
   user : User;
 
   constructor(private accountService: AccountService){
@@ -19,6 +18,10 @@ export class AppComponent {
     accountService.user.subscribe(x => {
       this.user = x;
     });
+  }
+
+  onLogout(){
+    this.accountService.logout();
   }
 
 }

@@ -8,15 +8,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatNativeDateModule} from '@angular/material/core';
 import {HttpClientModule} from '@angular/common/http';
-import {MatToolbar, MatToolbarModule} from '@angular/material/toolbar'; 
+import {MatToolbarModule} from '@angular/material/toolbar'; 
 import {MatIconModule} from '@angular/material/icon'; 
 import {MatFormFieldModule} from '@angular/material/form-field'
-
+import { MatInputModule } from '@angular/material/input';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDividerModule} from '@angular/material/divider';
+import { RegisterComponent } from './pages/register/register.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    RegisterComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +36,10 @@ import {MatFormFieldModule} from '@angular/material/form-field'
     MatIconModule,
     MatToolbarModule,
     MatFormFieldModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDividerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

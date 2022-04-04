@@ -1,16 +1,31 @@
-<mat-toolbar *ngIf="user.username">
-  <span><b routerLink="/">{{title}}</b></span>
 
-  <span class="spacer"></span>
-  
-  <input placeholder="Search" [(ngModel)]="searchValue">
+<nav  class="navbar-fixed sticky-nav navbar">
+  <div class="nav-wrapper">
 
-  <span class="spacer"></span>
+    <form *ngIf="user.username" class="brand-logo center">
+      <div class="input-field purple lighten-1">
+        <input id="search" type="search">
+        <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+        <i class="material-icons">close</i>
+      </div>
+    </form>
 
-  <button mat-icon-button>
-      <mat-icon>account_circle</mat-icon>
-  </button>
-</mat-toolbar>
+    <ul *ngIf="user.username">
+      <div class="right">
+          <button mat-icon-button >
+            <mat-icon>account_circle</mat-icon>
+          </button>
+        <span (click)="onLogout()"><b>LogOut</b></span>
+      </div>
+    </ul>
+    <ul class="brand-logo left">
+      <li>
+        <b routerLink="/home">{{title}}</b>
+      </li>
+    </ul>
+
+  </div>
+</nav>
 
 <!-- The routed views render in the <router-outlet>-->
 <router-outlet></router-outlet>
