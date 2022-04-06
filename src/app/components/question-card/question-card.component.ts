@@ -1,5 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit } from '@angular/core';
 import Question from 'src/app/models/question';
+import Tag from 'src/app/models/tag';
+import User from 'src/app/models/user';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'question-card',
@@ -9,11 +12,17 @@ import Question from 'src/app/models/question';
 export class QuestionCardComponent implements OnInit {
 
   @Input() question : Question;
-
-  constructor() { }
+  @Input() questionView: boolean;
+  private user : User;
+ 
+  constructor(private accountService: AccountService) { 
+    this.user = accountService.userValue;
+  }
 
   ngOnInit(): void {
-    // this.question.author
+  }
+
+  ngAfterViewInit(){
   }
 
 }

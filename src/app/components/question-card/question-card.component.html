@@ -1,13 +1,21 @@
-
-    <div class="col s12 m6 width center ">
-        <div class="card indigo lighten-2">
-            <div class="card-content white-text">
-                <span class="card-title">{{question.title}}</span>
+<div class="col s12 m6 width center">
+    <div class="card indigo lighten-2 ">
+        <div class="card-content card-width white-text waves-effect waves-dark">
+            <span class="card-title ">{{question.title}} <span class="new badge align-right"
+                    data-badge-caption="Score">{{question.voteCount}}</span></span>
+            <div class="floating-action-btn align-right">
+                <a class="btn-floating btn-large red">
+                    <i class="large material-icons">mode_edit</i>
+                </a>
+            </div>
+            <div *ngIf="questionView">
                 <p>{{question.content}}</p>
             </div>
-            <div class="card-action">
-                <a href="#">This is a link</a>
-                <a href="#">This is a link</a>
+            <div>
+                <div *ngFor="let tag of question.tags;" class="chip">
+                    {{tag.tag}}
+                </div>
             </div>
         </div>
     </div>
+</div>
