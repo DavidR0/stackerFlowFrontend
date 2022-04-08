@@ -1,11 +1,25 @@
 export default class User {
-    id: number;
-    username: string;
+    userId: number;
+    userName: string;
     password: string;
-    token: string;
     email: string;
     type: "Admin"|"User";
     banned: boolean;
-    TwoFact: boolean;
-    privateKey: string;
+    twoFact: boolean;
+    refreshToken: string;
+    accessToken: string;
+
+    constructor(user?: any) {
+        if(user){
+            this.userId = user.userId;
+            this.userName = user.userName;
+            this.password = user.password;
+            this.email = user.email;
+            this.type = user.type;
+            this.banned = user.banned;
+            this.twoFact = user.twoFact;
+            this.refreshToken = user.refreshToken;
+            this.accessToken = user.accessToken;
+        }
+    }
 }

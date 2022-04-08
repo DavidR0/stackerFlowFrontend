@@ -24,6 +24,9 @@
                         </div>
                     </div>
                     <div>
+                        <div *ngIf="registerMSG !== true">{{registerMSG}}</div>
+                    </div>
+                    <div>
                         <button mat-button [disabled]="loading">
                             Create account
                         </button>

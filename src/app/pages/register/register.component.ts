@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import User from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
 
@@ -13,7 +14,8 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   submitted = false;
   loading = false;
-  returnUrl: string;
+  registerMSG: string | boolean;
+
   
   constructor(private formBuilder: FormBuilder, private accountService: AccountService, private router: Router) { }
 
@@ -39,10 +41,16 @@ export class RegisterComponent implements OnInit {
     const user = new User();
     user.email = this.form.value.email;
     user.password = this.form.value.password;
-    user.username = this.form.value.username;
+    user.userName = this.form.value.username;
 
-    this.accountService.register(user);
-    this.router.navigate(['/login']);
+    this.accountService.register(user).pipe(first()).subscribe(
+      () => {
+        this.router.navigate(['/login']);
+      },
+      error => {
+        this.registerMSG = error;
+        this.loading = false;
+      }); 
   }
 
 }

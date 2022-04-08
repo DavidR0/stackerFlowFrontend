@@ -7,7 +7,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatNativeDateModule} from '@angular/material/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {MatToolbarModule} from '@angular/material/toolbar'; 
 import {MatIconModule} from '@angular/material/icon'; 
 import {MatFormFieldModule} from '@angular/material/form-field'
@@ -18,6 +18,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import { RegisterComponent } from './pages/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
 import { QuestionCardComponent } from './components/question-card/question-card.component';
+import { ErrorInterceptor } from './utils/error.interceptor';
+import { JwtInterceptor } from './utils/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,10 @@ import { QuestionCardComponent } from './components/question-card/question-card.
     MatButtonModule,
     MatDividerModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { AccountService } from 'src/app/services/account.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
   submitted = false;
   loading = false;
   returnUrl: string;
+  loginMSG: string | boolean;
 
   constructor(private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private accountService: AccountService) { 
   }
@@ -28,9 +30,15 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.accountService.login(this.form.value.username,this.form.value.password);
-    this.loading = false;
-    this.router.navigate(['/home']);
+    this.accountService.login(this.form.value.email,this.form.value.password).pipe(first())
+    .subscribe(
+      () => {
+        this.router.navigate([this.returnUrl]);
+      },
+      error => {
+        this.loginMSG = error;
+        this.loading = false;
+      });
   }
 
   ngOnInit(): void {
@@ -38,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
 
     this.form = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required]
     });
   }

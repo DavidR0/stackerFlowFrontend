@@ -5,9 +5,9 @@
             <div>
                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
                     <div>
-                        <input type="text" formControlName="username" placeholder="Username"/>
-                        <div *ngIf="submitted && f['username'].errors">
-                            <div *ngIf="f['username'].errors['required']">Username is required</div>
+                        <input type="email" formControlName="email" placeholder="Email"/>
+                        <div *ngIf="submitted && f['email'].errors">
+                            <div *ngIf="f['email'].errors['required']">Email is required</div>
                         </div>
                     </div>
                     <div>
@@ -15,6 +15,9 @@
                         <div *ngIf="submitted && f['password'].errors">
                             <div *ngIf="f['password'].errors['required']">Password is required</div>
                         </div>
+                    </div>
+                    <div>
+                        <div *ngIf="loginMSG !== true">{{loginMSG}}</div>
                     </div>
                     <div>
                         <button mat-button [disabled]="loading">

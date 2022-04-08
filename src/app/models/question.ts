@@ -1,4 +1,5 @@
 import Tag from "./tag";
+import Vote from "./vote";
 
 export default class Question {
     questionId: number;
@@ -9,6 +10,7 @@ export default class Question {
     creationTime: Date;
     voteCount: number;
     tags: Tag[];
+    votes: Vote[];
 
     constructor(quest: any){
 
