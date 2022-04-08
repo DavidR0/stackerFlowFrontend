@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { first } from 'rxjs/operators';
 import Question from 'src/app/models/question';
 import Tag from 'src/app/models/tag';
@@ -19,22 +20,22 @@ export class HomeComponent implements OnInit {
   votes: Vote[];
   constructor(private questionService: QuestionService, private tagService: TagService, private voteService: VoteService) { }
 
-  ngOnInit(): void {
-    this.questionService.getQuestions().pipe(first()).subscribe(q => {
-      this.questions = q;
+  async ngOnInit(): Promise<void> {
+    this.questions = await firstValueFrom(this.questionService.getQuestions());
+    this.tags = await firstValueFrom(this.tagService.getQuestionTags());
+    // this.votes = await firstValueFrom(this.voteService.getVotes());
+    this.votes = this.voteService.getVotes();
 
-      this.tags = this.tagService.getQuestionTags();
-      this.votes = this.voteService.getVotes();
-      //filter tags by question id and add to question
-      this.questions.forEach(q => {
-        return q.tags = this.tags.filter(t => t.questionId === q.questionId);
-      });
-  
-      //filter votes by question id and add to question
-      this.questions.forEach(q => {
-        return q.votes = this.votes.filter(v => v.itemId === q.questionId && v.itemType === 'question');
-      });  
+
+    //filter tags by question id and add to question
+    this.questions.forEach(q => {
+      return q.tags = this.tags.filter(t => t.questionId === q.questionId);
     });
+
+    //filter votes by question id and add to question
+    this.questions.forEach(q => {
+      return q.votes = this.votes.filter(v => v.itemId === q.questionId && v.itemType === 'question');
+    });  
   }
 
   onAddQuestion(){
