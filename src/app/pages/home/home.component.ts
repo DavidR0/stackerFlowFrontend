@@ -23,9 +23,7 @@ export class HomeComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.questions = await firstValueFrom(this.questionService.getQuestions());
     this.tags = await firstValueFrom(this.tagService.getQuestionTags());
-    // this.votes = await firstValueFrom(this.voteService.getVotes());
-    this.votes = this.voteService.getVotes();
-
+    this.votes = await firstValueFrom(this.voteService.getVotes());
 
     //filter tags by question id and add to question
     this.questions.forEach(q => {

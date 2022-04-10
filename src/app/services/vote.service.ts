@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import Answer from '../models/answer';
 import Question from '../models/question';
 import User from '../models/user';
@@ -9,36 +11,10 @@ import { AccountService } from './account.service';
   providedIn: 'root'
 })
 export class VoteService {
-  private vote = [
-    {
-        "voteId": 1,
-        "userId": 46,
-        "itemId": 5,
-        "voteType": "up",
-        "itemType": "question"
-    },
-    {
-        "voteId": 2,
-        "userId": 46,
-        "itemId": 4,
-        "voteType": "down",
-        "itemType": "question"
-    },
-    {
-        "voteId": 3,
-        "userId": 30,
-        "itemId": 7,
-        "voteType": "down",
-        "itemType": "question"
-    }
-  ];
-
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService, private http: HttpClient) { }
 
   getVotes() {
-    //TODO replace with api call to get votes
-    //Map to Vote model
-    return this.vote.map(v => new Vote(v));
+    return this.http.get<Vote[]>(`${environment.apiUrl}/api/vote/getAll`);
   }
 
   addVote(type : "up" | "down", item : Question | Answer){

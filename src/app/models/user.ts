@@ -8,6 +8,7 @@ export default class User {
     twoFact: boolean;
     refreshToken: string;
     accessToken: string;
+    sessionId: number;
 
     constructor(user?: any) {
         if(user){
@@ -20,6 +21,7 @@ export default class User {
             this.twoFact = user.twoFact;
             this.refreshToken = user.refreshToken;
             this.accessToken = user.accessToken;
+            this.sessionId = user.sessionId;
         }
     }
 }
