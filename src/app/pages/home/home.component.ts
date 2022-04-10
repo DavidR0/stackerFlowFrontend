@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import Question from 'src/app/models/question';
 import Tag from 'src/app/models/tag';
 import Vote from 'src/app/models/vote';
@@ -16,14 +15,18 @@ import { VoteService } from 'src/app/services/vote.service';
 export class HomeComponent implements OnInit {
 
   questions: Question[];
+  questionSubject: BehaviorSubject<Question[]>;
   tags: Tag[];
   votes: Vote[];
-  constructor(private questionService: QuestionService, private tagService: TagService, private voteService: VoteService) { }
+  constructor(private questionService: QuestionService, private tagService: TagService, private voteService: VoteService) {
+    this.questionSubject = new BehaviorSubject<Question[]>(this.questions);
+   }
 
   async ngOnInit(): Promise<void> {
     this.questions = await firstValueFrom(this.questionService.getQuestions());
     this.tags = await firstValueFrom(this.tagService.getQuestionTags());
     this.votes = await firstValueFrom(this.voteService.getVotes());
+
 
     //filter tags by question id and add to question
     this.questions.forEach(q => {
@@ -32,11 +35,14 @@ export class HomeComponent implements OnInit {
 
     //filter votes by question id and add to question
     this.questions.forEach(q => {
-      return q.votes = this.votes.filter(v => v.itemId === q.questionId && v.itemType === 'question');
+      return q.votes = this.votes.filter(v => v.itemId == q.questionId && v.itemType === 'question');
     });  
+
+    this.questionSubject.next(this.questions);
   }
 
   onAddQuestion(){
-    console.log("Add question");
+    //console.log("Add question");
+    this.questions = [];
   }
 }

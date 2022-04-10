@@ -1,12 +1,12 @@
 <div class="img-rocket">
-  
+
   <div class="center">
-    <question-card *ngFor="let question of questions;" [question]="question" [questionView]="false"></question-card>
+    <question-card *ngFor="let question of questionSubject | async;" [question]="question" [questionView]="false"></question-card>
   </div>
- 
+
   <div class="fixed-action-btn horizontal " style="bottom: 45px; right: 24px;">
-      <a class="btn-floating btn-large red waves-effect waves-light">
-        <i (click)="onAddQuestion()" class="large material-icons">add</i>
-      </a>
+    <a class="btn-floating btn-large red waves-effect waves-light">
+      <i (click)="onAddQuestion()" class="large material-icons">add</i>
+    </a>
   </div>
 </div>

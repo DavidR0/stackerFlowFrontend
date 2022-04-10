@@ -17,18 +17,53 @@ export class VoteService {
     return this.http.get<Vote[]>(`${environment.apiUrl}/api/vote/getAll`);
   }
 
-  addVote(type : "up" | "down", item : Question | Answer){
-  //   //TODO replace with api call to vote question
-  //   if(type === "up"){
-  //     this.questions.find(q => q.questionId === question.questionId)!.voteCount++;
-  //   }else{
-  //     this.questions.find(q => q.questionId === question.questionId)!.voteCount--;
-  //   }
+  isQuestion(item: Question | Answer): item is Question {
+    return (<Question>item).questionId !== undefined;
   }
 
-  removeVote(type : "up" | "down", item : Question | Answer){
+  addVote(type: "up" | "down", item: Question | Answer) {
+    //voteType, itemType, itemId
+    if (this.isQuestion(item)) {
+      return this.http.post<Vote>(`${environment.apiUrl}/api/vote/create`, 
+      { 
+        voteType: type, 
+        itemType: 'question', 
+        itemId: item.questionId.toString()
+      });
+
+    } else {
+      return this.http.post<Vote>(`${environment.apiUrl}/api/vote/create`, 
+      { 
+        voteType: type, 
+        itemType: 'answer', 
+        itemId: item.answerId 
+      });
+    }
+  }
+
+  deleteVote(type: "up" | "down", item: Question | Answer) {
     const user: User = this.accountService.userValue;
-    //use the userId and item id to find the vote and remove it
+    if(this.isQuestion(item)){
+
+      return this.http.request<Vote>('delete',`${environment.apiUrl}/api/vote/delete/`, 
+      {
+        body: { 
+          voteType: type, 
+          itemType: 'question', 
+          itemId: item.questionId.toString()
+        }
+      });
+    }
+    else{
+      return this.http.request<Vote>('delete',`${environment.apiUrl}/api/vote/delete/`, 
+      {
+        body: { 
+          voteType: type, 
+          itemType: 'answer', 
+          itemId: item.answerId 
+        }
+      });
+    }
   }
 
 }
