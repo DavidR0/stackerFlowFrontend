@@ -5,10 +5,12 @@ export default class Tag {
     qtagId: number;
     questionId: number;
 
-    constructor(tag:any) {
-        this.tagId = tag.tagId;
-        this.tag = tag.tag;
-        this.qtagId = tag.qtagId;
-        this.questionId = tag.questionId;
+    constructor(tag?:any) {
+        if(tag){
+            this.tagId = tag.tagId;
+            this.tag = tag.tag;
+            this.qtagId = tag.qtagId;
+            this.questionId = tag.questionId;
+        }
     }
 }

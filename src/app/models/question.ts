@@ -12,15 +12,18 @@ export default class Question {
     tags: Tag[];
     votes: Vote[];
 
-    constructor(quest: any){
-
-        this.questionId = quest.questionId;
-        this.userId = quest.userId;
-        this.author = quest.author;
-        this.title = quest.title;
-        this.content = quest.content;
-        this.creationTime = new Date(quest.creationTime);
-        this.voteCount = quest.voteCount;
+    constructor(quest?: any){
+        if(quest){
+            this.questionId = quest.questionId;
+            this.userId = quest.userId;
+            this.author = quest.author;
+            this.title = quest.title;
+            this.content = quest.content;
+            this.creationTime = quest.creationTime;
+            this.voteCount = quest.voteCount;
+            this.tags = quest.tags;
+            this.votes = quest.votes;
+        }
     }
 
 }

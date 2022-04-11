@@ -1,0 +1,46 @@
+<mat-card class="center">
+    <h4>Create Question</h4>
+    <div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div>
+                <input type="text" formControlName="title" placeholder="Title" />
+                <div *ngIf="submitted && f['title'].errors">
+                    <div *ngIf="f['title'].errors['required']">Title is required</div>
+                </div>
+            </div>
+
+            <div>
+                <input type="text" formControlName="content" placeholder="Content" />
+                <div *ngIf="submitted && f['content'].errors">
+                    <div *ngIf="f['content'].errors['required']">Content is required</div>
+                </div>
+            </div>
+
+            <mat-form-field class="example-chip-list" appearance="fill">
+                <mat-label>Tags</mat-label>
+                <mat-chip-list #chipList aria-label="Fruit selection">
+                    <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+                      {{tag}}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                    <input placeholder="New tag..."
+                           [matChipInputFor]="chipList"
+                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                           [matChipInputAddOnBlur]="addOnBlur"
+                           (matChipInputTokenEnd)="add($event)">
+                  </mat-chip-list>
+              </mat-form-field>
+
+            <div>
+                <div *ngIf="createMSG !== true">{{createMSG}}</div>
+            </div>
+            <div>
+                <button mat-button [disabled]="loading">
+                    Add Question
+                </button>
+            </div>
+        </form>
+    </div>
+</mat-card>

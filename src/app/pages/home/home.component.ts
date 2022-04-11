@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import Question from 'src/app/models/question';
 import Tag from 'src/app/models/tag';
@@ -18,7 +19,7 @@ export class HomeComponent implements OnInit {
   questionSubject: BehaviorSubject<Question[]>;
   tags: Tag[];
   votes: Vote[];
-  constructor(private questionService: QuestionService, private tagService: TagService, private voteService: VoteService) {
+  constructor(private questionService: QuestionService, private tagService: TagService, private voteService: VoteService, private router: Router) {
     this.questionSubject = new BehaviorSubject<Question[]>(this.questions);
    }
 
@@ -42,7 +43,6 @@ export class HomeComponent implements OnInit {
   }
 
   onAddQuestion(){
-    //console.log("Add question");
-    this.questions = [];
+    this.router.navigate(['/createQuestion']);
   }
 }

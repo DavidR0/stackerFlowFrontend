@@ -1,16 +1,17 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import Question from 'src/app/models/question';
 import User from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
 import { VoteService } from 'src/app/services/vote.service';
+import {FloatingActionButton} from "materialize-css"
 
 @Component({
   selector: 'question-card',
   templateUrl: './question-card.component.html',
   styleUrls: ['./question-card.component.scss']
 })
-export class QuestionCardComponent implements OnInit {
+export class QuestionCardComponent implements OnInit, AfterViewInit {
 
   @Input() question: Question;
   @Input() questionView: boolean;
@@ -19,9 +20,23 @@ export class QuestionCardComponent implements OnInit {
   votedDown: boolean = false;
 
   constructor(private accountService: AccountService, private voteService: VoteService) {
-    this.user = this.accountService.userValue;
+    this.user = this.accountService.userValue;    
+    
+    $(document).ready(function(){
+      (<any>$('.floating-action-btn')).floatingActionButton({
+        direction: 'left',
+        hoverEnabled: true
+      });
+    });
+
+
+  }
+  ngAfterViewInit(): void {
+
+    
   }
   ngOnInit(): void {
+
     this.updateView();
   }
 

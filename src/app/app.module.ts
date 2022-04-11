@@ -20,6 +20,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { QuestionCardComponent } from './components/question-card/question-card.component';
 import { ErrorInterceptor } from './utils/error.interceptor';
 import { JwtInterceptor } from './utils/jwt.interceptor';
+import { CreateQuestionComponent } from './pages/create-question/create-question.component';
+import { MatChipList } from '@angular/material/chips';
+import {MatChip} from '@angular/material/chips';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,7 @@ import { JwtInterceptor } from './utils/jwt.interceptor';
     RegisterComponent,
     HomeComponent,
     QuestionCardComponent,
+    CreateQuestionComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +49,8 @@ import { JwtInterceptor } from './utils/jwt.interceptor';
     MatInputModule,
     MatButtonModule,
     MatDividerModule,
+    MatChipsModule,
+
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
