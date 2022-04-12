@@ -24,6 +24,9 @@ import { CreateQuestionComponent } from './pages/create-question/create-question
 import { MatChipList } from '@angular/material/chips';
 import {MatChip} from '@angular/material/chips';
 import {MatChipsModule} from '@angular/material/chips';
+import { ViewQuestionComponent } from './pages/view-question/view-question.component';
+import { AnswerCardComponent } from './components/answer-card/answer-card.component';
+import { UserComponent } from './pages/user/user.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,9 @@ import {MatChipsModule} from '@angular/material/chips';
     HomeComponent,
     QuestionCardComponent,
     CreateQuestionComponent,
+    ViewQuestionComponent,
+    AnswerCardComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,

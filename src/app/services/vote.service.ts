@@ -17,13 +17,13 @@ export class VoteService {
     return this.http.get<Vote[]>(`${environment.apiUrl}/api/vote/getAll`);
   }
 
-  isQuestion(item: Question | Answer): item is Question {
-    return (<Question>item).questionId !== undefined;
+  isQuestion(item: Question | Answer): item is Answer {
+    return (<Answer>item).answerId !== undefined;
   }
 
   addVote(type: "up" | "down", item: Question | Answer) {
     //voteType, itemType, itemId
-    if (this.isQuestion(item)) {
+    if (!this.isQuestion(item)) {
       return this.http.post<Vote>(`${environment.apiUrl}/api/vote/create`, 
       { 
         voteType: type, 
@@ -43,7 +43,7 @@ export class VoteService {
 
   deleteVote(type: "up" | "down", item: Question | Answer) {
     const user: User = this.accountService.userValue;
-    if(this.isQuestion(item)){
+    if(!this.isQuestion(item)){
 
       return this.http.request<Vote>('delete',`${environment.apiUrl}/api/vote/delete/`, 
       {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import Question from 'src/app/models/question';
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
 
     //filter votes by question id and add to question
     this.questions.forEach(q => {
-      return q.votes = this.votes.filter(v => v.itemId == q.questionId && v.itemType === 'question');
+      return q.votes = this.votes.filter(v => v.itemId == q.questionId);
     });  
 
     this.questionSubject.next(this.questions);

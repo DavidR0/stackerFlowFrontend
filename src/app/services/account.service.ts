@@ -53,4 +53,8 @@ export class AccountService {
     return this.http.post<User>(`${environment.apiUrl}/api/user/create`,
       { email: user.email, password: user.password, userName: user.userName });
   }
+
+  getAccount(user: User) {
+    return this.http.post<User>(`${environment.apiUrl}/api/user/get`, { userId: user.userId });
+  }
 }

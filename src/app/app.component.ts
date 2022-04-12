@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import User from './models/user';
 import { AccountService } from './services/account.service';
 
@@ -13,7 +14,7 @@ export class AppComponent {
   title = 'stackerflow';
   user : User;
 
-  constructor(private accountService: AccountService){
+  constructor(private accountService: AccountService, private router: Router){
     //Subscribe to user change events, such as login/logout
     accountService.user.subscribe(x => {
       this.user = x;
@@ -22,6 +23,10 @@ export class AppComponent {
 
   onLogout(){
     this.accountService.logout();
+  }
+
+  onUser(){
+    this.router.navigate(['/user',this.user.userId]);
   }
 
 }

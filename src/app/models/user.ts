@@ -9,6 +9,7 @@ export default class User {
     refreshToken: string;
     accessToken: string;
     sessionId: number;
+    score: number;
 
     constructor(user?: any) {
         if(user){
@@ -22,6 +23,7 @@ export default class User {
             this.refreshToken = user.refreshToken;
             this.accessToken = user.accessToken;
             this.sessionId = user.sessionId;
+            this.score = user.score;
         }
     }
 }

@@ -1,17 +1,18 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import Question from 'src/app/models/question';
 import User from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
 import { VoteService } from 'src/app/services/vote.service';
-import {FloatingActionButton} from "materialize-css"
+import { Router } from '@angular/router';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'question-card',
   templateUrl: './question-card.component.html',
   styleUrls: ['./question-card.component.scss']
 })
-export class QuestionCardComponent implements OnInit, AfterViewInit {
+export class QuestionCardComponent implements OnInit {
 
   @Input() question: Question;
   @Input() questionView: boolean;
@@ -19,28 +20,11 @@ export class QuestionCardComponent implements OnInit, AfterViewInit {
   votedUp: boolean = false;
   votedDown: boolean = false;
 
-  constructor(private accountService: AccountService, private voteService: VoteService) {
+  constructor(private dataService: DataService,private accountService: AccountService, private voteService: VoteService, private router: Router) {
     this.user = this.accountService.userValue;    
-    
-    $(document).ready(function(){
-      (<any>$('.floating-action-btn')).floatingActionButton({
-        direction: 'left',
-        hoverEnabled: true
-      });
-    });
-
-
   }
-  ngAfterViewInit(): void {
 
-    
-  }
   ngOnInit(): void {
-
-    this.updateView();
-  }
-
-  private updateView(){
     //if user voted on question, set votedUp/Down to true
     if (this.question.votes != undefined) {
       this.question.votes.forEach(v => {
@@ -80,4 +64,10 @@ export class QuestionCardComponent implements OnInit, AfterViewInit {
     this.votedDown = !this.votedDown;
   }
 
+  viewQuestion(){
+    //Save the question to the data service
+    this.dataService.data = this.question;
+    //rote to view question page
+    this.router.navigate(['/viewQuestion']);
+  }
 }

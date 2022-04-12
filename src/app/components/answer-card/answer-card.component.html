@@ -1,31 +1,20 @@
-<div class="col s12 m6 width center">
+<div class="col s12 m6 width center ">
     <div class="card indigo lighten-2 ">
-        <div class="card-content card-width white-text waves-effect waves-dark">
+        <div class="card-content card-width white-text waves-effect waves-dark indigo lighten-1">
 
-            <span (click)="viewQuestion()" class="card-title ">{{question.title}} 
-                <span class="new badge align-right"
-                    data-badge-caption="Score">{{question.voteCount}}
-                </span>
-            </span>
+            <div>
+                <p>{{answer.content}}</p>
+            </div>
 
-            <div *ngIf="user.type === 'Admin' || question.userId === user.userId"
+            <div *ngIf="user.type === 'Admin' || answer.userId === user.userId"
                 class="floating-action-btn align-right">
                 <a class="btn-floating btn-large red">
                     <i class="large material-icons">mode_edit</i>
                 </a>
             </div>
 
-            <div *ngIf="questionView">
-                <p>{{question.content}}</p>
-            </div>
-
-            <div>
-                <div *ngFor="let tag of question.tags;" class="chip">
-                    {{tag.tag}}
-                </div>
-            </div>
-
-            <span *ngIf="question.userId !== user.userId" class="align-left">
+            
+            <span *ngIf="answer.userId !== user.userId" class="align-left">
                 <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedUp}"
                     [ngClass]="{'disabled': votedDown}" (click)="voteUp()"><i
                         class="material-icons">arrow_upward</i></a>

@@ -4,13 +4,17 @@ import { CreateQuestionComponent } from './pages/create-question/create-question
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { UserComponent } from './pages/user/user.component';
+import { ViewQuestionComponent } from './pages/view-question/view-question.component';
 import { AuthGuard } from './utils/authGuard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+  { path: 'user/:id', component: UserComponent, canActivate: [AuthGuard]},
   { path: 'createQuestion', component: CreateQuestionComponent, canActivate: [AuthGuard]},
+  { path: 'viewQuestion', component: ViewQuestionComponent, canActivate: [AuthGuard]},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ];
