@@ -2,19 +2,17 @@
     <div class="card indigo lighten-2 ">
         <div class="card-content card-width white-text waves-effect waves-dark">
 
-            <span (click)="viewQuestion()" class="card-title ">{{question.title}} 
-                <span class="new badge align-right"
-                    data-badge-caption="Score">{{question.voteCount}}
-                </span>
+            <span (click)="viewQuestion()" class="card-title ">
+                {{question.title}} 
             </span>
 
-            <div *ngIf="user.type === 'Admin' || question.userId === user.userId"
-                class="floating-action-btn align-right">
-                <a class="btn-floating btn-large red">
-                    <i class="large material-icons">mode_edit</i>
-                </a>
-            </div>
-
+            <span class="align-right" (click)="onAuthor()">
+                <b>{{question.author}}</b>
+                <span class="new badge align-right" data-badge-caption="Score">
+                    {{authorScore}}
+                </span>
+            </span>
+        
             <div *ngIf="questionView">
                 <p>{{question.content}}</p>
             </div>
@@ -25,15 +23,26 @@
                 </div>
             </div>
 
-            <span *ngIf="question.userId !== user.userId" class="align-left">
-                <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedUp}"
-                    [ngClass]="{'disabled': votedDown}" (click)="voteUp()"><i
-                        class="material-icons">arrow_upward</i></a>
-                <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedDown}"
-                    [ngClass]="{'disabled': votedUp}" (click)="voteDown()"><i
-                        class="material-icons">arrow_downward</i></a>
-            </span>
+            <div *ngIf="user.type === 'Admin' || question.userId === user.userId && questionView" class="floating-action-btn align-right">
+                <a class="btn-floating btn-large red">
+                    <i class="large material-icons">mode_edit</i>
+                </a>
+            </div>
 
+            <span>
+                <span *ngIf="question.userId !== user.userId" class="align-left">
+                    <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedUp}"
+                        [ngClass]="{'disabled': votedDown}" (click)="voteUp()"><i
+                            class="material-icons">arrow_upward</i></a>
+                    <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedDown}"
+                        [ngClass]="{'disabled': votedUp}" (click)="voteDown()"><i
+                            class="material-icons">arrow_downward</i></a>
+                </span>
+
+                <span class="new badge align-left" data-badge-caption="Votes">
+                    {{question.voteCount}}
+                </span>
+            </span>
         </div>
     </div>
 </div>

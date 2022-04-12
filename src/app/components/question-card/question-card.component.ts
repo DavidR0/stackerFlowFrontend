@@ -19,12 +19,13 @@ export class QuestionCardComponent implements OnInit {
   user: User;
   votedUp: boolean = false;
   votedDown: boolean = false;
+  authorScore: number = 0;
 
   constructor(private dataService: DataService,private accountService: AccountService, private voteService: VoteService, private router: Router) {
     this.user = this.accountService.userValue;    
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     //if user voted on question, set votedUp/Down to true
     if (this.question.votes != undefined) {
       this.question.votes.forEach(v => {
@@ -37,6 +38,13 @@ export class QuestionCardComponent implements OnInit {
           }
         }
       });
+    }
+    //get the author's score
+    if(this.question.userId === this.user.userId){
+      this.authorScore = this.user.score;
+    }else{
+      //get the user's score
+      this.authorScore = (await firstValueFrom(this.accountService.getAccount(new User({userId:this.question.userId})))).score;
     }
   }
 
@@ -69,5 +77,10 @@ export class QuestionCardComponent implements OnInit {
     this.dataService.data = this.question;
     //rote to view question page
     this.router.navigate(['/viewQuestion']);
+  }
+
+  onAuthor(){
+    //rote to view question page
+    this.router.navigate(['/user',this.question.userId]);
   }
 }
