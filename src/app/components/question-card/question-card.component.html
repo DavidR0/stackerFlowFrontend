@@ -1,49 +1,104 @@
 <div class="col s12 m6 width center">
     <div class="card indigo lighten-2 ">
         <div class="card-content card-width white-text waves-effect waves-dark">
-
-            <span (click)="viewQuestion()" class="card-title ">
-                {{question.title}} 
-            </span>
-
-            <span class="align-right" (click)="onAuthor()">
-                <b>{{question.author}}</b>
-                <span class="new badge align-right" data-badge-caption="Score">
-                    {{authorScore}}
+            <div *ngIf="!editing">
+                <span (click)="viewQuestion()" class="card-title ">
+                    {{question.title}}
                 </span>
-            </span>
-        
-            <div *ngIf="questionView">
-                <p>{{question.content}}</p>
-            </div>
 
-            <div>
-                <div *ngFor="let tag of question.tags;" class="chip">
-                    {{tag.tag}}
+                <span class="align-right" (click)="onAuthor()">
+                    <b>{{question.author}}</b>
+                    <span class="new badge align-right" data-badge-caption="Score">
+                        {{authorScore}}
+                    </span>
+                </span>
+
+                <div *ngIf="questionView">
+                    <p>{{question.content}}</p>
                 </div>
+
+                <div>
+                    <div *ngFor="let tag of question.tags;" class="chip">
+                        {{tag.tag}}
+                    </div>
+                </div>
+
+                <div *ngIf="user.type === 'Admin' || question.userId === user.userId && questionView"
+                    class="floating-action-btn align-right">
+                    <a class="btn-floating btn-large red" (click)="onEdit()">
+                        <i class="large material-icons">mode_edit</i>
+                    </a>
+                </div>
+
+                <span>
+                    <span *ngIf="question.userId !== user.userId" class="align-left">
+                        <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedUp}"
+                            [ngClass]="{'disabled': votedDown}" (click)="voteUp()"><i
+                                class="material-icons">arrow_upward</i></a>
+                        <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedDown}"
+                            [ngClass]="{'disabled': votedUp}" (click)="voteDown()"><i
+                                class="material-icons">arrow_downward</i></a>
+                    </span>
+
+                    <span class="new badge align-left" data-badge-caption="Votes">
+                        {{question.voteCount}}
+                    </span>
+                </span>
             </div>
 
-            <div *ngIf="user.type === 'Admin' || question.userId === user.userId && questionView" class="floating-action-btn align-right">
-                <a class="btn-floating btn-large red">
-                    <i class="large material-icons">mode_edit</i>
-                </a>
+
+
+
+            <div *ngIf="editing">
+                <div>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                        <div>
+                            <input type="text" formControlName="title" placeholder="Title" />
+                            <div *ngIf="submitted && f['title'].errors">
+                                <div *ngIf="f['title'].errors['required']">Title is required</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="text" formControlName="content" placeholder="Content" />
+                            <div *ngIf="submitted && f['content'].errors">
+                                <div *ngIf="f['content'].errors['required']">Content is required</div>
+                            </div>
+                        </div>
+
+                        <mat-form-field class="example-chip-list" appearance="fill">
+                            <mat-label>Tags</mat-label>
+                            <mat-chip-list #chipList aria-label="Fruit selection">
+                                <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+                                    {{tag}}
+                                    <button matChipRemove>
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                </mat-chip>
+                                <input placeholder="New tag..." [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-list>
+                        </mat-form-field>
+
+                        <div>
+                            <div *ngIf="createMSG !== true">{{createMSG}}</div>
+                        </div>
+                        <div>
+                            <button mat-button [disabled]="loading">
+                                Edit Question
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <button mat-button (click)="onEdit()" [disabled]="loading">
+                    Cancel
+                 </button>
+                 <button mat-button (click)="onDelete()" [disabled]="loading">
+                    Delete
+                 </button>
+    
             </div>
-
-            <span>
-                <span *ngIf="question.userId !== user.userId" class="align-left">
-                    <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedUp}"
-                        [ngClass]="{'disabled': votedDown}" (click)="voteUp()"><i
-                            class="material-icons">arrow_upward</i></a>
-                    <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedDown}"
-                        [ngClass]="{'disabled': votedUp}" (click)="voteDown()"><i
-                            class="material-icons">arrow_downward</i></a>
-                </span>
-
-                <span class="new badge align-left" data-badge-caption="Votes">
-                    {{question.voteCount}}
-                </span>
-            </span>
         </div>
     </div>
 </div>
-

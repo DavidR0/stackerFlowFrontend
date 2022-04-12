@@ -20,7 +20,15 @@ export class TagService {
     //create tag
     const res = await firstValueFrom(this.http.post<Tag>(`${environment.apiUrl}/api/tag/create`, {tag: tag.tag }));
     tag.tagId = res.tagId;
-    return await firstValueFrom(this.http.post<{questionId:number, tagId:number}>(`${environment.apiUrl}/api/qTag/create`, { tagId: tag.tagId, questionId: question.questionId }));
-       
+    return await firstValueFrom(this.http.post<{questionId:number, qtagId:number}>(`${environment.apiUrl}/api/qTag/create`, { tagId: tag.tagId, questionId: question.questionId }));
   }
+
+  deleteQuestionTag(tag: Tag) {
+    return this.http.request<Tag>('delete',`${environment.apiUrl}/api/qTag/delete/`,{
+      body:{
+        id: tag.qtagId,
+      }
+    });
+  }
+
 }

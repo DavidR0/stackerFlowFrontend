@@ -9,6 +9,10 @@ import Question from '../models/question';
 })
 export class QuestionService {
 
+  updateQuestion(question: Question){
+    return this.http.patch<Question>(`${environment.apiUrl}/api/question/update`, question);
+  }
+
   constructor(private http: HttpClient) { }
 
   getQuestions(){
