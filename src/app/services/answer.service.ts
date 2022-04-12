@@ -9,6 +9,17 @@ import Question from '../models/question';
 })
 export class AnswerService {
 
+  deleteAnswer(answer: Answer) {
+    return this.http.request<Answer>('delete',`${environment.apiUrl}/api/answer/delete`, {body: { ...answer }}
+    );
+  }
+
+  updateAnswer(answer: Answer) {
+    return this.http.patch<Answer>(`${environment.apiUrl}/api/answer/update`,
+      { ...answer }
+    );
+  }
+
   createAnswer(answer: Answer) {
     return this.http.post<Answer>(`${environment.apiUrl}/api/answer/create`,
       { ...answer }

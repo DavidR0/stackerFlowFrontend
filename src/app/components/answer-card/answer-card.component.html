@@ -1,20 +1,51 @@
-<div class="col s12 m6 width center ">
+<div class="col s12 m6 width center" *ngIf="!deleted">
     <div class="card indigo lighten-2 ">
         <div class="card-content card-width white-text waves-effect waves-dark indigo lighten-1">
 
-            <div>
+            <div *ngIf="!editing">
                 <p>{{answer.content}}</p>
             </div>
 
-            <div *ngIf="user.type === 'Admin' || answer.userId === user.userId"
+            <div *ngIf="editing" class="center">
+                <div class="col s12 m6">
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <!-- create an answer form, generated -->
+                            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                                <div>
+                                    <input type="text" formControlName="content" placeholder="Answer" />
+                                    <div *ngIf="submitted && f['content'].errors">
+                                        {{createMSG}}
+                                    </div>
+                                </div>
+                                <div>
+                                    <button mat-button [disabled]="loading">
+                                        Edit Answer
+                                    </button>
+                                </div>
+                            </form>
+                            <button mat-button (click)="onEdit()"  [disabled]="loading">
+                                Cancel
+                            </button>
+                            <button mat-button (click)="onDelete()"  [disabled]="loading">
+                                Delete Answer
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div *ngIf="user.type === 'Admin' || answer.userId === user.userId && !editing"
                 class="floating-action-btn align-right">
-                <a class="btn-floating btn-large red">
+                <a class="btn-floating btn-large red" (click)="onEdit()">
                     <i class="large material-icons">mode_edit</i>
                 </a>
             </div>
 
             
-            <span *ngIf="answer.userId !== user.userId" class="align-left">
+            <span *ngIf="answer.userId !== user.userId && !editing" class="align-left">
                 <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedUp}"
                     [ngClass]="{'disabled': votedDown}" (click)="voteUp()"><i
                         class="material-icons">arrow_upward</i></a>

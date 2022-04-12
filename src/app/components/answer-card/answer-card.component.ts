@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import Answer from 'src/app/models/answer';
 import User from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
+import { AnswerService } from 'src/app/services/answer.service';
 import { VoteService } from 'src/app/services/vote.service';
 
 @Component({
@@ -17,12 +19,24 @@ export class AnswerCardComponent implements OnInit {
   user: User;
   votedUp : boolean = false;
   votedDown : boolean = false;
+  editing: boolean = false;
+  loading: boolean = false;
+  deleted: boolean = false;
+  createMSG: string | boolean;
+  form: FormGroup;
+  submitted: boolean = false;
+
   
-  constructor(private voteService: VoteService, private accountService: AccountService) { 
+  constructor(private formBuilder: FormBuilder, private voteService: VoteService, private accountService: AccountService, private answerService: AnswerService) { 
     this.user = this.accountService.userValue;
   }
 
   ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      content: [this.answer.content, Validators.required],
+    });
+
+
     //if user voted on answer, set votedUp/Down to true
     if (this.answer.votes != undefined) {
       this.answer.votes.forEach(v => {
@@ -61,5 +75,53 @@ export class AnswerCardComponent implements OnInit {
     }
     this.votedDown = !this.votedDown;
   }
+
+  onEdit(){
+    this.editing = !this.editing;
+  }
+
+  onDelete() {
+    this.loading = true;
+    this.answerService.deleteAnswer(new Answer({answerId: this.answer.answerId})).subscribe(
+      async => {
+        this.loading = false;
+        this.deleted = true;
+      },
+      error => {
+        this.createMSG = error;
+        this.loading = false;
+      }
+    );
+  }
+
+  onSubmit() {
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.form.invalid) {
+        return;
+    }
+
+    this.loading = true;
+    this.answerService.updateAnswer(new Answer({
+      answerId: this.answer.answerId,
+      content: this.f['content'].value
+    })).subscribe(
+      async data => {
+        this.loading = false;
+        this.submitted = false;
+        this.editing = false;
+        this.answer.content = data.content;
+      },
+      error => {
+        this.createMSG = error;
+        this.loading = false;
+      }
+    );
+
+  }
+
+  get f() { return this.form.controls; }
+
 
 }

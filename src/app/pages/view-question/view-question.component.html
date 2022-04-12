@@ -16,7 +16,7 @@
                     <div>
                         <input type="text" formControlName="content" placeholder="Answer" />
                         <div *ngIf="submitted && f['content'].errors">
-                            <!-- <div *ngIf="f['content'].errors['required']">Answer is required</div> -->
+                            <div *ngIf="f['content'].errors['required']">Answer is required</div>
                         </div>
                     </div>
                     <div>

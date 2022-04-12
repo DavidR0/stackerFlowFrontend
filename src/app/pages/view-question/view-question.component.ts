@@ -65,15 +65,18 @@ export class ViewQuestionComponent implements OnInit {
       content: this.f['content'].value
     })).subscribe(
       async data => {
-        const rez = data;
-        this.loading = false;
+        this.loading = false; 
+        this.submitted = false;
         this.form.reset();
         this.answers = await firstValueFrom(this.answerService.getQuestionAnswers(new Question({questionId: this.question.questionId})));
         this.answers.sort((a,b) => b.voteCount - a.voteCount);
+
+        this.answerSubject.next(this.answers);
       },
       error => {
         this.createMSG = error;
         this.loading = false;
+        this.submitted = false;
       }
     );
   }
