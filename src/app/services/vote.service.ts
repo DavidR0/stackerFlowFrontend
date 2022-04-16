@@ -13,8 +13,10 @@ import { AccountService } from './account.service';
 export class VoteService {
   constructor(private accountService: AccountService, private http: HttpClient) { }
 
-  getVotes() {
-    return this.http.get<Vote[]>(`${environment.apiUrl}/api/vote/getAll`);
+  getVotes(vote: Vote) {
+    return this.http.post<Vote[]>(`${environment.apiUrl}/api/vote/getAll`, {
+      ...vote
+    });
   }
 
   isQuestion(item: Question | Answer): item is Answer {

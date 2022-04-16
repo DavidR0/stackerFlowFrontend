@@ -21,8 +21,6 @@ import { QuestionCardComponent } from './components/question-card/question-card.
 import { ErrorInterceptor } from './utils/error.interceptor';
 import { JwtInterceptor } from './utils/jwt.interceptor';
 import { CreateQuestionComponent } from './pages/create-question/create-question.component';
-import { MatChipList } from '@angular/material/chips';
-import {MatChip} from '@angular/material/chips';
 import {MatChipsModule} from '@angular/material/chips';
 import { ViewQuestionComponent } from './pages/view-question/view-question.component';
 import { AnswerCardComponent } from './components/answer-card/answer-card.component';

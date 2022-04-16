@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import Question from 'src/app/models/question';
 import User from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
 import { VoteService } from 'src/app/services/vote.service';
 import { Router } from '@angular/router';
-import { DataService } from 'src/app/services/data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { QuestionService } from 'src/app/services/question.service';
 import { TagService } from 'src/app/services/tag.service';
 import Tag from 'src/app/models/tag';
+import Vote from 'src/app/models/vote';
 
 
 @Component({
@@ -19,7 +19,7 @@ import Tag from 'src/app/models/tag';
   templateUrl: './question-card.component.html',
   styleUrls: ['./question-card.component.scss']
 })
-export class QuestionCardComponent implements OnInit {
+export class QuestionCardComponent implements OnInit, OnChanges {
 
   @Input() question: Question;
   @Input() questionView: boolean;
@@ -38,36 +38,49 @@ export class QuestionCardComponent implements OnInit {
   tags: string[] = [];
 
 
-  constructor(private formBuilder: FormBuilder, private dataService: DataService, private accountService: AccountService, 
+  constructor(private formBuilder: FormBuilder,private accountService: AccountService, 
     private voteService: VoteService,private questionService: QuestionService, private tagService: TagService ,private router: Router) {
     this.user = this.accountService.userValue;
   }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
     this.form = this.formBuilder.group({
       title: [this.question.title, Validators.required],
       content: [this.question.content, Validators.required],
     });
 
-    //add tags to tags array
-    this.question.tags.forEach(tag => { this.tags.push(tag.tag) });
-
-    //if user voted on question, set votedUp/Down to true
-    if (this.question.votes != undefined) {
-      this.question.votes.forEach(v => {
-        if (v.userId === this.user.userId && v.itemType === 'question') {
-          if (v.voteType === 'up') {
-            this.votedUp = true;
-          }
-          else if (v.voteType === 'down') {
-            this.votedDown = true;
-          }
-        }
-      });
+    if(this.question.userId != undefined){
+      //get the author's score
+      this.authorScore = (await firstValueFrom(this.accountService.getAccount(new User({ userId: this.question.userId })))).score;
     }
-    //get the author's score
-    this.authorScore = (await firstValueFrom(this.accountService.getAccount(new User({ userId: this.question.userId })))).score;
   }
+
+  async ngOnInit(): Promise<void> {
+    //get question votes
+    await firstValueFrom(this.voteService.getVotes(new Vote({ itemId: this.question.questionId,itemType: "question" }))).then(votes => {
+        //if user voted on question, set votedUp/Down to true
+        votes.forEach(vote => {
+          if (vote.userId === this.user.userId) {
+            if (vote.voteType === 'up') {
+              this.votedUp = true;
+            } else {
+              this.votedDown = true;
+            }
+          }
+        });
+      });
+
+    //get question tags
+    this.tagService.getQuestionTags(new Tag({questionId : this.question.questionId})).subscribe(
+      (tags: Tag[]) => {
+        this.question.tags = tags;
+        //add tags to tags array
+        tags.forEach(tag => {
+          this.tags.push(tag.tag);
+        });
+      }
+    );
+  }  
 
   get f() { return this.form.controls; }
 
@@ -96,10 +109,8 @@ export class QuestionCardComponent implements OnInit {
   }
 
   viewQuestion() {
-    //Save the question to the data service
-    this.dataService.data = this.question;
     //rote to view question page
-    this.router.navigate(['/viewQuestion']);
+    this.router.navigate(['/viewQuestion', this.question.questionId]);
   }
 
   onAuthor() {
@@ -138,6 +149,7 @@ export class QuestionCardComponent implements OnInit {
     }
   }
 
+  //Update question
   async onSubmit() {
     this.submitted = true;
 

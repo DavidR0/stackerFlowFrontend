@@ -5,12 +5,14 @@ export default class Vote {
     voteType: string;
     itemType: "question" | "answer";
 
-    constructor(vote: any) {
-        this.voteId = vote.voteId;
-        this.userId = vote.userId;
-        this.itemId = vote.itemId;
-        this.voteType = vote.voteType;
-        this.itemType = vote.itemType;
+    constructor(vote?: any) {
+        if (vote) {
+            this.voteId = vote.voteId;
+            this.userId = vote.userId;
+            this.itemId = vote.itemId;
+            this.voteType = vote.voteType;
+            this.itemType = vote.itemType;
+        }
     }
 }
 

@@ -81,7 +81,8 @@ export class CreateQuestionComponent implements OnInit {
           await this.tagService.addQuestionTag(new Tag({tag: tag}), new Question({questionId: res.questionId})).catch(err => console.log(err));
         });
         this.router.navigate(['/home']);
+        this.loading = false;
+        this.submitted = false;
     });
   }
-
 }

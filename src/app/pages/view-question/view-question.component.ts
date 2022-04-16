@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import Answer from 'src/app/models/answer';
 import Question from 'src/app/models/question';
 import Vote from 'src/app/models/vote';
 import { AnswerService } from 'src/app/services/answer.service';
-import { DataService } from 'src/app/services/data.service';
-import { VoteService } from 'src/app/services/vote.service';
+import { QuestionService } from 'src/app/services/question.service';
 
 @Component({
   selector: 'app-view-question',
@@ -24,39 +24,42 @@ export class ViewQuestionComponent implements OnInit {
   answerSubject: BehaviorSubject<Answer[]>;
 
 
-  constructor(private formBuilder: FormBuilder,private dataService: DataService, private answerService: AnswerService, private voteService: VoteService) { 
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder,
+    private answerService: AnswerService, private questionService: QuestionService) {
+
     this.answerSubject = new BehaviorSubject<Answer[]>(this.answers);
+    this.question = new Question();
+    this.question.questionId = this.route.snapshot.params['id'];
   }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
+
     this.form = this.formBuilder.group({
       content: ['', Validators.required],
     });
 
-    this.question = this.dataService.data;
-    //Get the answers for the question
-    this.answers = await firstValueFrom(this.answerService.getQuestionAnswers(new Question({questionId: this.question.questionId})));
-    this.votes = await firstValueFrom(this.voteService.getVotes());
-
-    //sort answers by voteCount
-    this.answers.sort((a,b) => b.voteCount - a.voteCount);
-
-    //add votes to answers votes array from question
-    this.answers.forEach(answer => {
-      answer.votes = this.votes.filter(vote => vote.itemId === answer.answerId && vote.itemType === 'answer');
+    //Get the question
+    await firstValueFrom(this.questionService.getQuestion(this.question)).then(question => {
+      this.question = question;
+      return question;
     });
 
+    //Get the answers for the question and sort them by vote count (descending)
+    this.answers = await firstValueFrom(this.answerService.getQuestionAnswers(this.question));
+    this.answers.sort((a, b) => b.voteCount - a.voteCount);
+    //Update the UI with the answers
     this.answerSubject.next(this.answers);
   }
 
   get f() { return this.form.controls; }
 
+  //Create a new answer to question
   onSubmit() {
     this.submitted = true;
 
     // stop here if form is invalid
     if (this.form.invalid) {
-        return;
+      return;
     }
 
     this.loading = true;
@@ -64,12 +67,12 @@ export class ViewQuestionComponent implements OnInit {
       questionId: this.question.questionId,
       content: this.f['content'].value
     })).subscribe(
-      async data => {
-        this.loading = false; 
+      async () => {
+        this.answers = await firstValueFrom(this.answerService.getQuestionAnswers(new Question({ questionId: this.question.questionId })));
+        this.answers.sort((a, b) => b.voteCount - a.voteCount);
+        this.loading = false;
         this.submitted = false;
         this.form.reset();
-        this.answers = await firstValueFrom(this.answerService.getQuestionAnswers(new Question({questionId: this.question.questionId})));
-        this.answers.sort((a,b) => b.voteCount - a.voteCount);
 
         this.answerSubject.next(this.answers);
       },

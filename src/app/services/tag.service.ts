@@ -12,8 +12,8 @@ export class TagService {
   
   constructor(private http: HttpClient) { }
 
-  getQuestionTags() {
-    return this.http.get<Tag[]>(`${environment.apiUrl}/api/qTag/getQTs`);
+  getQuestionTags(tag: Tag) {
+    return this.http.post<Tag[]>(`${environment.apiUrl}/api/qTag/getQTs`, tag);
   }
 
   async addQuestionTag(tag: Tag, question: Question) {

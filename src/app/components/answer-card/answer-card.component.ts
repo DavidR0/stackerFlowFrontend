@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import Answer from 'src/app/models/answer';
 import User from 'src/app/models/user';
@@ -25,9 +26,10 @@ export class AnswerCardComponent implements OnInit {
   createMSG: string | boolean;
   form: FormGroup;
   submitted: boolean = false;
+  authorScore: number = 1;
 
   
-  constructor(private formBuilder: FormBuilder, private voteService: VoteService, private accountService: AccountService, private answerService: AnswerService) { 
+  constructor(private router: Router, private formBuilder: FormBuilder, private voteService: VoteService, private accountService: AccountService, private answerService: AnswerService) { 
     this.user = this.accountService.userValue;
   }
 
@@ -93,6 +95,12 @@ export class AnswerCardComponent implements OnInit {
       }
     );
   }
+
+  onAuthor() {
+    //rote to view question page
+    this.router.navigate(['/user', this.answer.userId]);
+  }
+
 
   onSubmit() {
     this.submitted = true;

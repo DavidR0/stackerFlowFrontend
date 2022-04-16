@@ -4,6 +4,12 @@
 
             <div *ngIf="!editing">
                 <p>{{answer.content}}</p>
+                <span class="align-right" (click)="onAuthor()">
+                    <b>{{answer.author}}</b>
+                    <span class="new badge align-right" data-badge-caption="Score">
+                        {{authorScore}}
+                    </span>
+                </span>
             </div>
 
             <div *ngIf="editing" class="center">
@@ -38,7 +44,7 @@
             
 
             <div *ngIf="user.type === 'Admin' || answer.userId === user.userId && !editing"
-                class="floating-action-btn align-right">
+                class="floating-action-btn align-left">
                 <a class="btn-floating btn-large red" (click)="onEdit()">
                     <i class="large material-icons">mode_edit</i>
                 </a>
@@ -52,7 +58,14 @@
                 <a class="waves-effect waves-light btn " [ngClass]="{'purple darken-1': votedDown}"
                     [ngClass]="{'disabled': votedUp}" (click)="voteDown()"><i
                         class="material-icons">arrow_downward</i></a>
+                <span class="new badge align-right" data-badge-caption="Votes">
+                    {{answer.voteCount}}
+                </span>
             </span>
+
+            <div class="align-bottom-left">
+                {{answer.creationTime | date:"dd/MM/yy"}}
+            </div>
 
         </div>
     </div>
