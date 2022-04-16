@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import Answer from 'src/app/models/answer';
 import User from 'src/app/models/user';
+import Vote from 'src/app/models/vote';
 import { AccountService } from 'src/app/services/account.service';
 import { AnswerService } from 'src/app/services/answer.service';
 import { VoteService } from 'src/app/services/vote.service';
@@ -26,7 +27,7 @@ export class AnswerCardComponent implements OnInit {
   createMSG: string | boolean;
   form: FormGroup;
   submitted: boolean = false;
-  authorScore: number = 1;
+  authorScore: number;
 
   
   constructor(private router: Router, private formBuilder: FormBuilder, private voteService: VoteService, private accountService: AccountService, private answerService: AnswerService) { 
@@ -38,20 +39,34 @@ export class AnswerCardComponent implements OnInit {
       content: [this.answer.content, Validators.required],
     });
 
+    //get answer author score
+    this.accountService.getAccount(new User({
+      userId: this.answer.userId
+    })).subscribe(
+      user => {
+        this.authorScore = user.score;
+      }
+    );
+  
+    //get answer votes
+    this.voteService.getVotes(new Vote({
+      itemId: this.answer.answerId,
+      itemType: 'answer'
+      
+    })).subscribe(
+      votes => {
+        votes.forEach(vote => {
+          if (vote.userId === this.user.userId) {
+            if (vote.voteType === 'up') {
+              this.votedUp = true;
+            } else if (vote.voteType === 'down') {
+              this.votedDown = true;
+            }
+          }
+        });
+      }
+    );
 
-    //if user voted on answer, set votedUp/Down to true
-    if (this.answer.votes != undefined) {
-      this.answer.votes.forEach(v => {
-        if (v.userId === this.user.userId) {
-          if (v.voteType === 'up') {
-            this.votedUp = true;
-          }
-          else if (v.voteType === 'down') {
-            this.votedDown = true;
-          }
-        }
-      });
-    }
   }
 
   async voteUp() {
@@ -85,7 +100,7 @@ export class AnswerCardComponent implements OnInit {
   onDelete() {
     this.loading = true;
     this.answerService.deleteAnswer(new Answer({answerId: this.answer.answerId})).subscribe(
-      async => {
+      () => {
         this.loading = false;
         this.deleted = true;
       },
