@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import Answer from 'src/app/models/answer';
 import Question from 'src/app/models/question';
@@ -25,7 +25,7 @@ export class ViewQuestionComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private answerService: AnswerService, private questionService: QuestionService) {
+    private answerService: AnswerService, private questionService: QuestionService,private router: Router) {
 
     this.answerSubject = new BehaviorSubject<Answer[]>(this.answers);
     this.question = new Question();
@@ -41,8 +41,13 @@ export class ViewQuestionComponent implements OnInit {
     //Get the question
     await firstValueFrom(this.questionService.getQuestion(this.question)).then(question => {
       this.question = question;
+      //if question doesnt exist, redirect to home
+      if(question == undefined) {
+        this.router.navigate(['/home']);
+      }
       return question;
     });
+  
 
     //Get the answers for the question and sort them by vote count (descending)
     this.answers = await firstValueFrom(this.answerService.getQuestionAnswers(this.question));

@@ -123,7 +123,15 @@ export class QuestionCardComponent implements OnInit, OnChanges {
   }
 
   onDelete() {
-
+    //delete question
+    this.questionService.deleteQuestion(this.question).subscribe(
+      (res) => {
+        this.router.navigate(['/home']);
+      },
+      (err) => {
+        this.createMSG = err;
+      }
+    );
   }
 
   add(event: MatChipInputEvent): void {

@@ -8,6 +8,9 @@ import Question from '../models/question';
   providedIn: 'root'
 })
 export class QuestionService {
+  deleteQuestion(question: Question) {
+    return this.http.request<Question>('delete',`${environment.apiUrl}/api/question/delete`, { body: { questionId: question.questionId } });
+  }
 
   updateQuestion(question: Question){
     return this.http.patch<Question>(`${environment.apiUrl}/api/question/update`, question);

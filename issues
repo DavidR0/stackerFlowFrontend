@@ -1,4 +1,8 @@
 BUGs
--User score not updated correctly when adding and then deleting a down vote
 -When user is banned he can still have access untill he logs out
+-User doesnt receive email when he is banned
+
+BUGs no more
 -questions not search-able
+-User score not updated correctly when adding and then deleting a down vote
+-Question is not deleted when user deletes it
