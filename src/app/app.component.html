@@ -1,10 +1,10 @@
 
-<nav  class="navbar-fixed sticky-nav navbar waves-effect waves-dark">
+<nav class="navbar-fixed sticky-nav navbar waves-effect waves-dark">
   <div class="nav-wrapper">
 
     <form *ngIf="user.userName" class="brand-logo center">
       <div class="input-field purple lighten-1">
-        <input id="search" type="search">
+        <input id="search" type="search" (keydown.enter)="search($event)">
         <label class="label-icon" for="search"><i class="material-icons">search</i></label>
         <i class="material-icons">close</i>
       </div>

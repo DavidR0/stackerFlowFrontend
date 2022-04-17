@@ -29,4 +29,8 @@ export class AppComponent {
     this.router.navigate(['/user',this.user.userId]);
   }
 
+  search(event: any){
+    this.router.navigate(['/searchResults',event.target.value]);
+  }
+
 }

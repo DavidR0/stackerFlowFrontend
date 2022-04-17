@@ -25,6 +25,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { ViewQuestionComponent } from './pages/view-question/view-question.component';
 import { AnswerCardComponent } from './components/answer-card/answer-card.component';
 import { UserComponent } from './pages/user/user.component';
+import { SearchResultsComponent } from './pages/search-results/search-results.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { UserComponent } from './pages/user/user.component';
     ViewQuestionComponent,
     AnswerCardComponent,
     UserComponent,
+    SearchResultsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,2 +1,4 @@
 BUGs
 -User score not updated correctly when adding and then deleting a down vote
+-When user is banned he can still have access untill he logs out
+-questions not search-able
