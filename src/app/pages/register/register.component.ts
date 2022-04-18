@@ -25,7 +25,8 @@ export class RegisterComponent implements OnInit {
     this.form = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
-      email: ['', Validators.required]
+      email: ['', Validators.required],
+      admin: [false]
     });
   }
 
@@ -42,6 +43,10 @@ export class RegisterComponent implements OnInit {
     user.email = this.form.value.email;
     user.password = this.form.value.password;
     user.userName = this.form.value.username;
+    //if admin is checked, set admin to Admin
+    if (this.form.value.admin) {
+      user.type = 'Admin';
+    }
 
     this.accountService.register(user).pipe(first()).subscribe(
       () => {

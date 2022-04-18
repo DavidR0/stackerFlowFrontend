@@ -1,6 +1,7 @@
 BUGs
 -When user is banned he can still have access untill he logs out
 -User doesnt receive email when he is banned
+-An admin cannot ban a user
 
 BUGs no more
 -questions not search-able

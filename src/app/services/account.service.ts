@@ -51,7 +51,7 @@ export class AccountService {
 
   register(user: User) {
     return this.http.post<User>(`${environment.apiUrl}/api/user/create`,
-      { email: user.email, password: user.password, userName: user.userName });
+      { email: user.email, password: user.password, userName: user.userName, type: user.type});
   }
 
   getAccount(user: User) {
