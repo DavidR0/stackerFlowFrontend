@@ -57,4 +57,8 @@ export class AccountService {
   getAccount(user: User) {
     return this.http.post<User>(`${environment.apiUrl}/api/user/get`, { userId: user.userId });
   }
+
+  banUser(user: User) {
+    return this.http.patch<User>(`${environment.apiUrl}/api/user/update`, { userId: user.userId, banned: !user.banned });
+  }
 }
